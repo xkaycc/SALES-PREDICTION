@@ -1,0 +1,614 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/xkaycc/SALES-PREDICTION/blob/main/Preprocessing_Part_5.ipynb%20march\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "biH1_Atl7ZLA"
+      },
+      "outputs": [],
+      "source": [
+        "#import libraries\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import seaborn as sns\n",
+        "import matplotlib.pyplot as plt"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "KkOC8NCq7ZLF"
+      },
+      "outputs": [],
+      "source": [
+        "#import dataset\n",
+        "df =  pd.read_csv(r\"C:\\Users\\USER\\Desktop\\sales_predictions.csv\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "nOSqTI6f7ZLH",
+        "outputId": "972dce1a-88fb-4b39-9772-0df4dc201d2e"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Item_Identifier</th>\n",
+              "      <th>Item_Weight</th>\n",
+              "      <th>Item_Fat_Content</th>\n",
+              "      <th>Item_Visibility</th>\n",
+              "      <th>Item_Type</th>\n",
+              "      <th>Item_MRP</th>\n",
+              "      <th>Outlet_Identifier</th>\n",
+              "      <th>Outlet_Establishment_Year</th>\n",
+              "      <th>Outlet_Size</th>\n",
+              "      <th>Outlet_Location_Type</th>\n",
+              "      <th>Outlet_Type</th>\n",
+              "      <th>Item_Outlet_Sales</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>FDA15</td>\n",
+              "      <td>9.30</td>\n",
+              "      <td>Low Fat</td>\n",
+              "      <td>0.016047</td>\n",
+              "      <td>Dairy</td>\n",
+              "      <td>249.8092</td>\n",
+              "      <td>OUT049</td>\n",
+              "      <td>1999</td>\n",
+              "      <td>Medium</td>\n",
+              "      <td>Tier 1</td>\n",
+              "      <td>Supermarket Type1</td>\n",
+              "      <td>3735.1380</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>DRC01</td>\n",
+              "      <td>5.92</td>\n",
+              "      <td>Regular</td>\n",
+              "      <td>0.019278</td>\n",
+              "      <td>Soft Drinks</td>\n",
+              "      <td>48.2692</td>\n",
+              "      <td>OUT018</td>\n",
+              "      <td>2009</td>\n",
+              "      <td>Medium</td>\n",
+              "      <td>Tier 3</td>\n",
+              "      <td>Supermarket Type2</td>\n",
+              "      <td>443.4228</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>FDN15</td>\n",
+              "      <td>17.50</td>\n",
+              "      <td>Low Fat</td>\n",
+              "      <td>0.016760</td>\n",
+              "      <td>Meat</td>\n",
+              "      <td>141.6180</td>\n",
+              "      <td>OUT049</td>\n",
+              "      <td>1999</td>\n",
+              "      <td>Medium</td>\n",
+              "      <td>Tier 1</td>\n",
+              "      <td>Supermarket Type1</td>\n",
+              "      <td>2097.2700</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>FDX07</td>\n",
+              "      <td>19.20</td>\n",
+              "      <td>Regular</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>Fruits and Vegetables</td>\n",
+              "      <td>182.0950</td>\n",
+              "      <td>OUT010</td>\n",
+              "      <td>1998</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Tier 3</td>\n",
+              "      <td>Grocery Store</td>\n",
+              "      <td>732.3800</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>NCD19</td>\n",
+              "      <td>8.93</td>\n",
+              "      <td>Low Fat</td>\n",
+              "      <td>0.000000</td>\n",
+              "      <td>Household</td>\n",
+              "      <td>53.8614</td>\n",
+              "      <td>OUT013</td>\n",
+              "      <td>1987</td>\n",
+              "      <td>High</td>\n",
+              "      <td>Tier 3</td>\n",
+              "      <td>Supermarket Type1</td>\n",
+              "      <td>994.7052</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "  Item_Identifier  Item_Weight Item_Fat_Content  Item_Visibility  \\\n",
+              "0           FDA15         9.30          Low Fat         0.016047   \n",
+              "1           DRC01         5.92          Regular         0.019278   \n",
+              "2           FDN15        17.50          Low Fat         0.016760   \n",
+              "3           FDX07        19.20          Regular         0.000000   \n",
+              "4           NCD19         8.93          Low Fat         0.000000   \n",
+              "\n",
+              "               Item_Type  Item_MRP Outlet_Identifier  \\\n",
+              "0                  Dairy  249.8092            OUT049   \n",
+              "1            Soft Drinks   48.2692            OUT018   \n",
+              "2                   Meat  141.6180            OUT049   \n",
+              "3  Fruits and Vegetables  182.0950            OUT010   \n",
+              "4              Household   53.8614            OUT013   \n",
+              "\n",
+              "   Outlet_Establishment_Year Outlet_Size Outlet_Location_Type  \\\n",
+              "0                       1999      Medium               Tier 1   \n",
+              "1                       2009      Medium               Tier 3   \n",
+              "2                       1999      Medium               Tier 1   \n",
+              "3                       1998         NaN               Tier 3   \n",
+              "4                       1987        High               Tier 3   \n",
+              "\n",
+              "         Outlet_Type  Item_Outlet_Sales  \n",
+              "0  Supermarket Type1          3735.1380  \n",
+              "1  Supermarket Type2           443.4228  \n",
+              "2  Supermarket Type1          2097.2700  \n",
+              "3      Grocery Store           732.3800  \n",
+              "4  Supermarket Type1           994.7052  "
+            ]
+          },
+          "execution_count": 20,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#view five rows of the dataset\n",
+        "df.head()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "7f-eMFbD7ZLI",
+        "outputId": "7034e6d8-34bb-40f9-b983-7cfdcfefda4c"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "There are 8523 rows, and 12 columns\n"
+          ]
+        }
+      ],
+      "source": [
+        "#check the number rows and columns in our dataset\n",
+        "print(f\"There are {df.shape[0]} rows, and {df.shape[1]} columns\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "sfZZLn5a7ZLJ",
+        "outputId": "bc6d27b8-5505-4f3d-8b49-58a40952ccc1"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            " There are 0 duplicated values\n"
+          ]
+        }
+      ],
+      "source": [
+        "#check if there are duplicate values\n",
+        "print (f\" There are {df.duplicated().sum()} duplicated values\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "0BG5P39O7ZLJ",
+        "outputId": "28924c96-e1af-4fbd-e5c2-fed9eeb6ebb4"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "Index(['Item_Identifier', 'Item_Weight', 'Item_Fat_Content', 'Item_Visibility',\n",
+              "       'Item_Type', 'Item_MRP', 'Outlet_Identifier',\n",
+              "       'Outlet_Establishment_Year', 'Outlet_Size', 'Outlet_Location_Type',\n",
+              "       'Outlet_Type', 'Item_Outlet_Sales'],\n",
+              "      dtype='object')"
+            ]
+          },
+          "execution_count": 29,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#check columns names are synchronious\n",
+        "df.columns"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "U0Z14t_X7ZLK"
+      },
+      "outputs": [],
+      "source": [
+        "#Select the target variable with validation split\n",
+        "X = df.drop([\"Item_Outlet_Sales\"], axis = 1)\n",
+        "y = df[\"Item_Outlet_Sales\"].apply(int)\n",
+        "#validation spilt\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "X_train, X_test, y_train, y_test= train_test_split(X,y, random_state = 42)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "SOkfAL2C7ZLK",
+        "outputId": "177ef312-97e2-4f7c-a27f-b45b06f2bb9c"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "Item_Identifier                 0\n",
+              "Item_Weight                  1107\n",
+              "Item_Fat_Content                0\n",
+              "Item_Visibility                 0\n",
+              "Item_Type                       0\n",
+              "Item_MRP                        0\n",
+              "Outlet_Identifier               0\n",
+              "Outlet_Establishment_Year       0\n",
+              "Outlet_Size                  1812\n",
+              "Outlet_Location_Type            0\n",
+              "Outlet_Type                     0\n",
+              "dtype: int64"
+            ]
+          },
+          "execution_count": 32,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#check missing values\n",
+        "X_train.isna().sum()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "LL5i-z3i7ZLL"
+      },
+      "outputs": [],
+      "source": [
+        "#import preprocessing libraries\n",
+        "from sklearn.compose import make_column_transformer, make_column_selector\n",
+        "from sklearn.preprocessing import StandardScaler\n",
+        "from sklearn.impute import SimpleImputer\n",
+        "from sklearn.preprocessing import OneHotEncoder"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "KVrjnBJZ7ZLL"
+      },
+      "outputs": [],
+      "source": [
+        "#instantiate make column selectior\n",
+        "cat_selector = make_column_selector(dtype_include = \"object\")\n",
+        "num_selector = make_column_selector(dtype_include = \"number\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "HM-gmwcf7ZLM"
+      },
+      "outputs": [],
+      "source": [
+        "#instantiate Simpleimputer, StandardScaler and OneHotEncoder\n",
+        "freq_impute = SimpleImputer(strategy = \"most_frequent\")\n",
+        "mean_impute = SimpleImputer(strategy = \"mean\")\n",
+        "scaler = StandardScaler()\n",
+        "ohe = OneHotEncoder(handle_unknown = 'ignore', sparse = False)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "aC5jK71N7ZLM",
+        "outputId": "d3e0bc2e-0d7d-4359-b88b-cd8bb7e56ceb"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "Pipeline(steps=[('simpleimputer', SimpleImputer()),\n",
+              "                ('standardscaler', StandardScaler())])"
+            ]
+          },
+          "execution_count": 36,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#Import make_pipeline and instantiate\n",
+        "from sklearn.pipeline import make_pipeline\n",
+        "num_pipe = make_pipeline(mean_impute, scaler)\n",
+        "num_pipe"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "3p5Ze_nu7ZLN",
+        "outputId": "2bdec95c-5775-4a4d-91d0-c095a17bc6c4"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "Pipeline(steps=[('simpleimputer', SimpleImputer(strategy='most_frequent')),\n",
+              "                ('onehotencoder',\n",
+              "                 OneHotEncoder(handle_unknown='ignore', sparse=False))])"
+            ]
+          },
+          "execution_count": 37,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "cat_pipe = make_pipeline(freq_impute, ohe)\n",
+        "cat_pipe"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "r2IZna_z7ZLN",
+        "outputId": "edee6c1d-15e7-474d-8553-d65081f96413"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "ColumnTransformer(transformers=[('pipeline-1',\n",
+              "                                 Pipeline(steps=[('simpleimputer',\n",
+              "                                                  SimpleImputer()),\n",
+              "                                                 ('standardscaler',\n",
+              "                                                  StandardScaler())]),\n",
+              "                                 <sklearn.compose._column_transformer.make_column_selector object at 0x000001BE1732F9C8>),\n",
+              "                                ('pipeline-2',\n",
+              "                                 Pipeline(steps=[('simpleimputer',\n",
+              "                                                  SimpleImputer(strategy='most_frequent')),\n",
+              "                                                 ('onehotencoder',\n",
+              "                                                  OneHotEncoder(handle_unknown='ignore',\n",
+              "                                                                sparse=False))]),\n",
+              "                                 <sklearn.compose._column_transformer.make_column_selector object at 0x000001BE1732FA08>)])"
+            ]
+          },
+          "execution_count": 38,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#create tuple to fit for make_column_transformer\n",
+        "num_tuple = (num_pipe, num_selector)\n",
+        "cat_tuple = (cat_pipe, cat_selector)\n",
+        "preprocessor = make_column_transformer(num_tuple, cat_tuple)\n",
+        "preprocessor"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "nrEiNz3u7ZLO",
+        "outputId": "a24d1689-f835-44d8-8159-f0e37f9e3aa2"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "ColumnTransformer(transformers=[('pipeline-1',\n",
+              "                                 Pipeline(steps=[('simpleimputer',\n",
+              "                                                  SimpleImputer()),\n",
+              "                                                 ('standardscaler',\n",
+              "                                                  StandardScaler())]),\n",
+              "                                 <sklearn.compose._column_transformer.make_column_selector object at 0x000001BE1732F9C8>),\n",
+              "                                ('pipeline-2',\n",
+              "                                 Pipeline(steps=[('simpleimputer',\n",
+              "                                                  SimpleImputer(strategy='most_frequent')),\n",
+              "                                                 ('onehotencoder',\n",
+              "                                                  OneHotEncoder(handle_unknown='ignore',\n",
+              "                                                                sparse=False))]),\n",
+              "                                 <sklearn.compose._column_transformer.make_column_selector object at 0x000001BE1732FA08>)])"
+            ]
+          },
+          "execution_count": 39,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#X_train fitting\n",
+        "preprocessor.fit(X_train)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "oTW-cl2g7ZLO"
+      },
+      "outputs": [],
+      "source": [
+        "#Transforming both the X_train and X_test\n",
+        "X_train_trans = preprocessor.transform(X_train)\n",
+        "X_test_trans = preprocessor.transform(X_test)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "b93-d9HV7ZLO",
+        "outputId": "5a3b9675-121e-488a-af64-a30746456afe"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "0 missing value in training data\n",
+            "0 missing value in testing data\n"
+          ]
+        }
+      ],
+      "source": [
+        "#check if there are still missing data\n",
+        "print(np.isnan(X_train_trans).sum(), \"missing value in training data\")\n",
+        "print(np.isnan(X_test_trans).sum(), \"missing value in testing data\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "KLB-5ZeP7ZLP",
+        "outputId": "a20de293-ca52-499b-d4ab-3c63feb7b353"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "[[ 0.81724868 -0.71277507  1.82810922 ...  0.          1.\n",
+            "   0.        ]\n",
+            " [ 0.5563395  -1.29105225  0.60336888 ...  0.          1.\n",
+            "   0.        ]\n",
+            " [-0.13151196  1.81331864  0.24454056 ...  1.          0.\n",
+            "   0.        ]\n",
+            " ...\n",
+            " [ 1.11373638 -0.92052713  1.52302674 ...  1.          0.\n",
+            "   0.        ]\n",
+            " [ 1.76600931 -0.2277552  -0.38377708 ...  1.          0.\n",
+            "   0.        ]\n",
+            " [ 0.81724868 -0.95867683 -0.73836105 ...  1.          0.\n",
+            "   0.        ]] Transformed train dataset \n",
+            "\n",
+            "[[ 0.33100885 -0.77664625 -0.99881554 ...  1.          0.\n",
+            "   0.        ]\n",
+            " [-1.17989246  0.1003166  -1.58519423 ...  1.          0.\n",
+            "   0.        ]\n",
+            " [ 0.37844688 -0.48299432 -1.59578435 ...  1.          0.\n",
+            "   0.        ]\n",
+            " ...\n",
+            " [-1.13957013  1.21832428  1.09397975 ...  1.          0.\n",
+            "   0.        ]\n",
+            " [-1.49772727 -0.77809567 -0.36679966 ...  1.          0.\n",
+            "   0.        ]\n",
+            " [ 0.52076098 -0.77976293  0.11221189 ...  1.          0.\n",
+            "   0.        ]] Transformed test dataset\n"
+          ]
+        }
+      ],
+      "source": [
+        "#check the transformed datasets\n",
+        "print (X_train_trans, \"Transformed train dataset\", '\\n')\n",
+        "print (X_test_trans, \"Transformed test dataset\")\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "oPpLE4Vu7ZLP"
+      },
+      "outputs": [],
+      "source": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.7.6"
+    },
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
