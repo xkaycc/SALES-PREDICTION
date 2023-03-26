@@ -1,5 +1,5 @@
 # SALES-PREDICTION
-In this project, I analyzed the sales data for more than 8,000 different oulets. I made sales predictions in the various outlets based on their year of establishment, the type of outlet they represent, their year of establishment and the kind of item sold.
+In this project, I analyzed the sales data for more than 8,000 different oulets. I made sales predictions in the various outlets based on their year of establishment, the type of outlet they represent, their year of establishment and the kind of item sold. Link to the notebook https://github.com/xkaycc/SALES-PREDICTION/blob/main/Project%20%201%20(Core).ipynb
 
 #### Visualizations
 In this analysis, the missing data were visualized using missingno and also the correlation of the target variable to the features was visualized using heatmap
