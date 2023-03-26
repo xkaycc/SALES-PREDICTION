@@ -1,8 +1,12 @@
 # SALES-PREDICTION
 In this project, I analyzed the sales data for more than 8,000 different oulets. I made sales predictions in the various outlets based on their year of establishment, the type of outlet they represent, their year of establishment and the kind of item sold. The data cleaning, preprocessing and the modeling of the project was done
-Data cleaning
+
+Data cleaning [click](https://github.com/xkaycc/SALES-PREDICTION/blob/main/Data_Cleaning_(2).ipynb)
+
 Data Preprocessing 
+
 Link to the notebook [click](https://github.com/xkaycc/SALES-PREDICTION/blob/main/Project%20%201%20(Core).ipynb)
+
 #### Visualizations
 In this analysis, the missing data were visualized using missingno and also the correlation of the target variable to the features was visualized using heatmap
 ![image](https://user-images.githubusercontent.com/120944468/227781895-00536716-8a94-4b75-bf87-2f6d610dd622.png)
